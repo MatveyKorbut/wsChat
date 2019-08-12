@@ -34,6 +34,7 @@ class ChatMessage extends Component {
                           display="inline"
                           whitespace="normal"
                           key={idGenerator()}
+                          style={{color:'blue', fontSize:'calc(10px + 1vmin)' }}
                         >
                           {item.from + ":"}
                         </Typography>

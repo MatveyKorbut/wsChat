@@ -18,7 +18,7 @@ class Header extends Component {
     return (
       <header>
         <Container maxWidth='lg'>
-          <AppBar position="static" color="default">
+          <AppBar position="static" color="default" >
               <Toolbar>
                 <Typography variant="h6" color="inherit" style={{flexGrow: '1'}}>
                   Your name is {this.props.name}
