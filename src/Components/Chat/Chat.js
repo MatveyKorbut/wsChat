@@ -36,7 +36,12 @@ class Chat extends Component {
   componentDidMount() {
     this.ws.onopen = () => {
       console.log('connected');
-      const notification = new Notification('Connected to chat');
+      var options = {
+        body: 'WebSocketChat',
+        vibrate: [200, 100, 200]
+      }      
+      const notification = new Notification('Connected to chat',options);
+
       this.state.connected = true;
       
       if (localStorage.getItem('unsentMessages')){
