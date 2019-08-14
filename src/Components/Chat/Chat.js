@@ -39,7 +39,10 @@ class Chat extends Component {
       var options = {
         body: 'WebSocketChat',
       }      
-      const notification = new Notification('Connected to chat');
+      if (!window.Notification) {
+        const notification = new Notification('Connected to chat');
+      }
+
 
       this.state.connected = true;
       
