@@ -4,6 +4,7 @@ import {
   TextField 
 } from '@material-ui/core';
 
+
 class ChatInput extends Component {
   sendMessage = (event) => {
     if (event.keyCode === 13) {
