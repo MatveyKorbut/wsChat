@@ -20,7 +20,7 @@ class Chat extends Component {
     connected:false,
   }
 
-  ws = new ReconnectingWebSocket(URL);
+  ws = new WebSocket(URL);
   scrollToBottom() {
     this.el.scrollIntoView();
   }
