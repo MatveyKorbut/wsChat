@@ -17,7 +17,11 @@ class ChatMessage extends Component {
     return (
       <>
         {
-          props.data.map((item, index) => {
+          props.data.map((item) => {
+            let style = {color:'#313f9c', fontSize:'calc(10px + 1vmin)'};
+            if (item.from === this.props.you) {
+              style.color= '#f4005a';
+            }
             return (
               <>
                 <ListItem
@@ -34,7 +38,7 @@ class ChatMessage extends Component {
                           display="inline"
                           whitespace="normal"
                           key={idGenerator()}
-                          style={{color:'blue', fontSize:'calc(10px + 1vmin)' }}
+                          style={style}
                         >
                           {item.from + ":"}
                         </Typography>

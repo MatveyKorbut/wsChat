@@ -14,6 +14,7 @@ const URL = 'ws://st-chat.shas.tel';
 class Chat extends Component {
   state = {
     messages: [],
+    unsentMessages:[],
     focused: true,
     loading: true,
     connected:false,
@@ -31,16 +32,29 @@ class Chat extends Component {
   onFocus = () => {
     this.state.focused = true;
   }
+  
   componentDidMount() {
     this.ws.onopen = () => {
       console.log('connected');
       const notification = new Notification('Connected to chat');
       this.state.connected = true;
-      console.log('status is ' + this.state.connected)
+      
+      if (localStorage.getItem('unsentMessages')){
+        const messagesToSend = JSON.parse(localStorage.getItem('unsentMessages'));
+        
+        messagesToSend.forEach(element => {
+          const onemessage = {from: element.from, message: element.message};
+          this.ws.send(JSON.stringify(onemessage));
+          localStorage.removeItem('unsentMessages')
+        });
+        
+      
+      }
     }
 
     this.ws.onclose = () => {
       this.state.connected = false;
+      alert('connection close')
     }
 
     this.ws.onmessage = evt => {
@@ -53,7 +67,7 @@ class Chat extends Component {
             const options = {
               body: message[0].message,
             }
-            const notification = new Notification(`New message from ${message[0].from}`);
+            const notification = new Notification(`New message from ${message[0].from}`, options);
           }  
         }
       }
@@ -87,10 +101,13 @@ class Chat extends Component {
   
   sendMessage = (m) => {
     let message = {from: this.props.name, message: m};
+    if (!this.state.connected) {
+      this.state.unsentMessages.push(message);
+      localStorage.setItem('unsentMessages', JSON.stringify(this.state.unsentMessages));
+    }
     this.ws.send(JSON.stringify(message));
   }
 
-  
   ////////////////////////
   render() {
 
@@ -108,20 +125,19 @@ class Chat extends Component {
         marginBottom: "3%"
       }}
       >   
-      {this.state.loading? <CircularProgress/> : <></>}
-      <ChatMessage key={idGenerator()} data={this.state.messages}/>
-      <div ref={el => { this.el = el; }} />
-        
+        {this.state.loading? <CircularProgress/> : <></>}
+        <ChatMessage key={idGenerator()} data={this.state.messages} you={this.props.name}/>
+        <div ref={el => { this.el = el; }} />
       </Container>
       <Container>
         <ConnectionStatusBar status={this.state.connected}/>
       </Container>
- 
       <ChatInput sendMessage={this.sendMessage} name={this.props.name}/>
       </>
-     
     )
   }
 };
 
 export default Chat;
+
+//document.hidden
