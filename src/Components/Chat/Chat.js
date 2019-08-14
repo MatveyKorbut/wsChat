@@ -38,9 +38,8 @@ class Chat extends Component {
       console.log('connected');
       var options = {
         body: 'WebSocketChat',
-        vibrate: [200, 100, 200]
       }      
-      const notification = new Notification('Connected to chat',options);
+      const notification = new Notification('Connected to chat');
 
       this.state.connected = true;
       
