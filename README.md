@@ -1,6 +1,6 @@
 ## WebSocket Chat
 https://github.com/rolling-scopes-school/tasks/blob/2018-Q3/tasks/chat.md
-##Requirements:
+## Requirements:
 - [X] React
 - [ ] Redux
 - [X] Nickname should be stored in [LocalStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and reused across app launches.
