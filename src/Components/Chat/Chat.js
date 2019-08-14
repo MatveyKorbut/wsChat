@@ -8,7 +8,7 @@ import ChatMessage from '../ChatMessage/ChatMessage';
 import ChatInput from '../ChatInput/ChatInput';
 import ConnectionStatusBar from '../ConnectionStatusBar/ConnectionStatusBar';
 
-const URL = 'ws://st-chat.shas.tel';
+const URL = 'wss://wssproxy.herokuapp.com/';
 
 
 class Chat extends Component {
