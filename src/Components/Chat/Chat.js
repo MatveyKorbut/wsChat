@@ -8,7 +8,7 @@ import ChatMessage from '../ChatMessage/ChatMessage';
 import ChatInput from '../ChatInput/ChatInput';
 import ConnectionStatusBar from '../ConnectionStatusBar/ConnectionStatusBar';
 
-const URL = 'ws://st-chat.shas.tel';
+const URL = 'wss://wssproxy.herokuapp.com/';
 
 
 class Chat extends Component {
@@ -36,7 +36,15 @@ class Chat extends Component {
   componentDidMount() {
     this.ws.onopen = () => {
       console.log('connected');
-      const notification = new Notification('Connected to chat');
+      var options = {
+        body: 'WebSocketChat',
+      }      
+      if (window.Notification) {
+        Notification.requestPermission();
+        const notification = new Notification('Connected to chat', options);
+      }
+
+
       this.state.connected = true;
       
       if (localStorage.getItem('unsentMessages')){
@@ -47,13 +55,11 @@ class Chat extends Component {
           this.ws.send(JSON.stringify(onemessage));
           localStorage.removeItem('unsentMessages')
         });
-        
-      
       }
     }
 
     this.ws.onclose = () => {
-      this.state.connected = false;
+      this.setState({connected : false});
       alert('connection close')
     }
 
@@ -75,6 +81,7 @@ class Chat extends Component {
 
     this.ws.onclose = () => {
       const notification = new Notification('Disconnected from chat')
+      this.state.connected = false;
     }
         
     window.addEventListener("focus", this.onFocus);
@@ -83,12 +90,12 @@ class Chat extends Component {
   }
 
   componentDidUpdate() {
-    this.scrollToBottom();
     this.state.loading=false;
+    this.scrollToBottom();
   }
   
   componentWilUnmount() {
-    window.removeEventListener("focus", this.onFocus)
+    window.removeEventListener('focus', this.onFocus)
     window.addEventListener('blur', this.onBlur);
 }
 
@@ -107,6 +114,7 @@ class Chat extends Component {
     }
     this.ws.send(JSON.stringify(message));
   }
+
 
   ////////////////////////
   render() {
