@@ -17,7 +17,7 @@ class App extends Component {
   componentDidMount() {
     Notification.requestPermission();
 
-    if(localStorage.getItem('user')) {
+    if(localStorage.getItem('username')) {
       this.setState({username : localStorage.getItem('username')});
       const notification = new Notification('Welcome back, ' + localStorage.getItem('username'))
     }

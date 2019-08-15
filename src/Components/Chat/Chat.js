@@ -20,7 +20,7 @@ class Chat extends Component {
     connected:false,
   }
 
-  ws = new WebSocket(URL);
+  ws = new ReconnectingWebSocket(URL);
   scrollToBottom() {
     this.el.scrollIntoView();
   }
@@ -39,8 +39,9 @@ class Chat extends Component {
       var options = {
         body: 'WebSocketChat',
       }      
-      if (!window.Notification) {
-        const notification = new Notification('Connected to chat');
+      if (window.Notification) {
+        Notification.requestPermission();
+        const notification = new Notification('Connected to chat', options);
       }
 
 
@@ -54,13 +55,11 @@ class Chat extends Component {
           this.ws.send(JSON.stringify(onemessage));
           localStorage.removeItem('unsentMessages')
         });
-        
-      
       }
     }
 
     this.ws.onclose = () => {
-      this.state.connected = false;
+      this.setState({connected : false});
       alert('connection close')
     }
 
@@ -82,6 +81,7 @@ class Chat extends Component {
 
     this.ws.onclose = () => {
       const notification = new Notification('Disconnected from chat')
+      this.state.connected = false;
     }
         
     window.addEventListener("focus", this.onFocus);
@@ -90,12 +90,12 @@ class Chat extends Component {
   }
 
   componentDidUpdate() {
-    this.scrollToBottom();
     this.state.loading=false;
+    this.scrollToBottom();
   }
   
   componentWilUnmount() {
-    window.removeEventListener("focus", this.onFocus)
+    window.removeEventListener('focus', this.onFocus)
     window.addEventListener('blur', this.onBlur);
 }
 
@@ -114,6 +114,7 @@ class Chat extends Component {
     }
     this.ws.send(JSON.stringify(message));
   }
+
 
   ////////////////////////
   render() {
